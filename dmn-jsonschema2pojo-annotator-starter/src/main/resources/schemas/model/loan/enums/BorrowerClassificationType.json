@@ -1,0 +1,4 @@
+{
+    "additionalProperties" : false,
+    "enum" : [ "Secondary", "Primary" ]
+}

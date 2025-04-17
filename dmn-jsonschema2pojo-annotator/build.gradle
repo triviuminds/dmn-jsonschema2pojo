@@ -1,0 +1,58 @@
+plugins {
+	id 'java'
+	id 'maven-publish'
+    id 'net.nemerosa.versioning' version '3.1.0'
+}
+
+ext {
+	jasonSchema2PojoVersion = '1.2.2'
+	jacksonVersion = '2.18.2'
+
+    baseVersion = version != 'unspecified' ? version.split('-SNAPSHOT').getAt(0) : '1.0.0'
+    snapshotName = version != 'unspecified' && version.contains('SNAPSHOT') ? '-SNAPSHOT' : ''
+    snapshot = "${versioning.info.branch.equals('main') ? '' : snapshotName}"
+}
+
+group 'com.triviuminds.dmn.json2pojo'
+version = "${baseVersion}${snapshot}"
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    maven {
+        url "https://repo1.maven.org/maven2/"
+    }
+}
+
+dependencies {
+	implementation ("org.jsonschema2pojo:jsonschema2pojo-core:${jasonSchema2PojoVersion}") {
+		exclude group: 'com.fasterxml.jackson.dataformat', module: 'jackson-dataformat-yaml'
+	}
+	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
+	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+	implementation 'org.apache.commons:commons-collections4:4.4'
+}
+
+publishing {
+	 repositories {
+        maven {
+            url = version.endsWith('SNAPSHOT') ?  findProperty('nexusUrl') + "/repositories/snapshots/" : findProperty('nexusUrl') + "/repositories/releases/"
+            credentials {
+                username findProperty('nexusUser')
+                password findProperty('nexusPassword')
+            }
+        }
+    }
+
+	publications {
+		mavenJava(MavenPublication) {
+			groupId = group
+			version = version
+			artifact jar
+		}
+	}
+}
+

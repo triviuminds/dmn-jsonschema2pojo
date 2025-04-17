@@ -1,0 +1,128 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            url "https://repo1.maven.org/maven2/"
+        }
+    }
+
+    ext {
+        jasonSchema2PojoVersion = '1.2.2'
+        jacksonVersion = '2.17.1'
+        jakartaValidationVersion = '3.1.1'
+        dmnJson2pojoAnnotatorVersion = '1.0.0'
+    }
+
+    dependencies {
+        classpath ("org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:${jasonSchema2PojoVersion}") {
+            exclude group: 'com.fasterxml.jackson.dataformat', module: 'jackson-dataformat-yaml'
+            exclude group: 'com.fasterxml.jackson.core', module: 'jackson-databind'
+        }
+        classpath "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
+        classpath "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+        classpath "com.triviuminds.dmn.json2pojo:dmn-jsonschema2pojo-annotator:${dmnJson2pojoAnnotatorVersion}"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'jsonschema2pojo'
+apply plugin: 'maven-publish'
+
+group = 'com.triviuminds.dmn.json2pojo'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url "https://repo1.maven.org/maven2/"
+    }
+}
+
+dependencies {
+    implementation "com.triviuminds.dmn.json2pojo:dmn-jsonschema2pojo-annotator:${dmnJson2pojoAnnotatorVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationVersion}"
+
+    implementation 'org.kie:kie-dmn-api:10.0.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.12.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.12..2'
+    testImplementation 'org.hibernate:hibernate-validator:8.0.2.Final'
+    testImplementation 'jakarta.el:jakarta.el-api:6.0.1'
+    testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+    testImplementation 'org.glassfish:jakarta.el:4.0.2'
+}
+
+//System.setProperty("dmnSupport", "true")
+System.setProperty("customPatternProvider", "com.triviuminds.dmn.json2pojo.enums.StringPatternType")
+jsonSchema2Pojo {
+    useJakartaValidation = true
+    includeGeneratedAnnotation = false
+    includeAdditionalProperties = false
+    generateBuilders = true
+    source = files("${sourceSets.main.resources.srcDirs[0]}/schemas/")
+    targetDirectory = file("${buildDir}/generated/src/main/java")
+    targetPackage = 'com.triviuminds.example'
+    propertyWordDelimiters = ['-', '_'] as char[]
+    useLongIntegers = true
+    includeHashcodeAndEquals = true
+    includeToString = true
+    annotationStyle = 'jackson2'
+    includeJsr303Annotations = true
+    sourceType = 'jsonschema'
+    useBigDecimals = true
+    removeOldOutput = true
+    outputEncoding = 'UTF-8'
+    useJodaDates = false
+    formatDateTimes = false
+    formatDates = true
+    formatTimes = true
+    initializeCollections = true
+    includeConstructors = false
+    serializable = true
+    includeGetters = true
+    includeSetters = true
+    includeDynamicAccessors = true
+    includeDynamicGetters = true
+    includeDynamicSetters = true
+    dateType = 'java.time.LocalDate'
+    dateTimeType = 'java.time.OffsetDateTime'
+    customAnnotator = 'com.triviuminds.dmn.json2pojo.CustomAnnotator'
+}
+
+compileJava {
+    dependsOn generateJsonSchema2Pojo
+    options.encoding = 'UTF-8'
+}
+
+sourceSets.main.java.srcDirs += "${build}/generated/src/main/java"
+
+test {
+    useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        maven {
+            def url= version.endsWith('SNAPSHOT') ? findProperty('nexusUrl') + "repositories/releases/" : findProject('nexusUrl') + "repositories/snapshots/"
+            credentials {
+                username findProperty('nexusUsername')
+                password findProperty('nexusPassword')
+            }
+        }
+    }
+
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = group
+            version = version
+            artifact jar
+        }
+    }
+}

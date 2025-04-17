@@ -1,0 +1,4 @@
+{
+    "additionalProperties" : false,
+    "enum" : [ "Fatal", "Error", "Warning", "Info"]
+}

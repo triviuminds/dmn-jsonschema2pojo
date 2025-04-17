@@ -1,0 +1,4 @@
+{
+    "additionalProperties" : false,
+    "enum" : [ "PrimaryResidence", "SecondHome", "Investment", "Other" ]
+}

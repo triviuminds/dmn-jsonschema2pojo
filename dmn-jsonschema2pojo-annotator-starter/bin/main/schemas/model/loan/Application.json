@@ -1,0 +1,134 @@
+{
+    "$schema" : "https://json-schema.org/draft-07/schema#",
+    "title" : "Application submission schema",
+    "description" : "DMN prototyping schema",
+    "type" : "object",
+    "additionalProperties" : false,
+    "required" : [ "Assets", "Borrowers", "Property" ],
+    "properties" : {
+      "Borrowers" : {
+        "$ref" : "#/definitions/Borrowers"
+      },
+      "Assets" : {
+        "$ref" : "#/definitions/Assets"
+      },
+      "Property" : {
+        "$ref" : "#/definitions/Property"
+      }
+    },
+    "definitions" : {
+      "Assets" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/definitions/Asset"
+        },
+        "minItems" : 1,
+        "maxItems" : 4
+      },
+      "Borrowers" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/definitions/Borrower"
+        },
+        "minItems" : 1,
+        "maxItems" : 2
+      },
+      "AssetIdentifiers" : {
+        "type" : "array",
+        "items" : {
+          "assetAccountIdentifier" : {
+            "type": "string",
+            "patternType": "UUID"
+          }
+        },
+        "minItems" : 1,
+        "maxItems" : 4
+      },
+      "Property" : {
+        "additionalProperties" : false,
+        "type" : "object",
+        "properties" : {
+          "propertyUsageType" : {
+            "type": "string",
+            "existingJavaType" : "com.triviuminds.example.model.loan.enums.PropertyUsageType"
+          },
+          "financedUnitCount" : {
+            "type": "integer"
+          },
+          "attachmentType" : {
+            "type": "string",
+            "enumClass" : "com.triviuminds.example.model.loan.enums.AttachmentType"
+          },
+          "propertyEstimatedValueAmount" : {
+            "type": "number",
+            "pattern": "^\\d{1,16}(\\.\\d{1,2})?$"
+          }
+        },
+        "required" : [ "propertyUsageType", "propertyEstimatedValueAmount" ]
+      },
+      "Asset" : {
+        "additionalProperties" : false,
+        "type" : "object",
+        "properties" : {
+          "assetAccountType" : {
+            "type": "string",
+            "existingJavaType" : "com.triviuminds.example.model.loan.enums.AssetAccountType"
+          },
+          "assetLiquidityIndicator" : {
+            "type": "boolean"
+          },
+          "fundsSourceType" : {
+            "type": "string",
+            "existingJavaType" : "com.triviuminds.example.model.loan.enums.FundsSourceType"
+          },
+          "assetAccountIdentifier" : {
+            "type": "string",
+            "patternType": "UUID"
+          },
+          "assetType" : {
+            "type": "string",
+            "existingJavaType" : "com.triviuminds.example.model.loan.enums.AssetType"
+          },
+          "assetNetValueAmount" : {
+            "type": "number",
+            "multipleOf": 0.01
+          }
+        },
+        "required" : [ "assetAccountIdentifier", "assetType", "assetNetValueAmount" ]
+      },
+      "Borrower" : {
+        "type" : "object",
+        "additionalProperties" : false,
+        "properties" : {
+          "firstName" : {
+            "type": "string",
+            "patternType": "ALPHANUMERIC"
+          },
+          "lastName" : {
+            "type": "string",
+            "patternType": "ALPHANUMERIC"
+          },
+          "middleName" : {
+            "type": "string",
+            "patternType": "ALPHANUMERIC"
+          },
+          "borrowerClassificationType" : {
+            "type": "string",
+            "existingJavaType" : "com.triviuminds.example.model.loan.enums.BorrowerClassificationType"
+          },
+          "borrowerBirthDate" : {
+           "type": "string",
+            "format": "date"
+          },
+          "borrowerQualifyingIncomeAmount" : {
+            "type": "number",
+            "pattern": "^\\d{1,16}(\\.\\d{1,2})?$"
+          },
+          "AssetIdentifiers" : {
+            "$ref" : "#/definitions/AssetIdentifiers"
+          }
+        },
+        "required" : [ "AssetIdentifiers", "firstName", "lastName", "borrowerClassificationType", "borrowerBirthDate" ]
+      }
+    }
+  }

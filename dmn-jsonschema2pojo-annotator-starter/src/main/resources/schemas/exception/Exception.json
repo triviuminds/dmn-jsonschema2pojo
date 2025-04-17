@@ -1,0 +1,59 @@
+{
+    "type": "object",
+    "additionalProperties": false,
+    "definitions": {
+        "exceptionFieldInformation": {
+            "type": "object",
+            "properties": {
+                "exceptionFieldName": {
+                    "type": "string"
+                },
+                "exceptionFieldValue": {
+                    "type": "string"
+                },
+                "additionalInfo": {
+                    "type": "object",
+                    "existingJavaType": "java.util.Map<String, java.io.Serializable>"
+                }
+            }
+        }
+    },
+    "properties": {
+        "junkEnum": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "existingJavaType": "com.triviuminds.example.exception.enums.ExceptionSeverityType"
+            }
+        },
+        "exceptionCode": {
+            "type": "string"
+        },
+        "exceptionName": {
+            "type": "string"
+        },
+        "exceptionSeverityType": {
+            "type": "string",
+            "existingJavaType": "com.triviuminds.example.exception.enums.ExceptionSeverityType"
+        },
+        "exceptionCategoryType": {
+            "type": "string",
+            "existingJavaType": "com.triviuminds.example.exception.enums.ExceptionCategoryType"
+        },
+        "exceptionSubCategoryType": {
+            "type": "string"
+        },
+        "exceptionSourceName": {
+            "type": "string"
+        },
+        "exceptionDescription": {
+            "type": "string"
+        },
+        "exceptionDetails": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/exceptionFieldInformation"
+            }
+        }
+    }
+}

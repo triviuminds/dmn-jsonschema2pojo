@@ -1,0 +1,4 @@
+{
+    "additionalProperties" : false,
+    "enum" : [ "BorrowerManagedAccount", "RelatedPartyManagedAccount", "Other" ]
+}

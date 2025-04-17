@@ -1,0 +1,4 @@
+{
+    "additionalProperties" : false,
+    "enum" : [ "Crowdfunding", "Relative", "Parent", "ReligiousNonProfit", "UnmarriedPartner", "Borrower", "Employer", "RuralHousingService", "Builder", "UnrelatedFriend", "FederalAgency", "StateAgency", "NonOriginatingFinancialInstitution", "CommunityNonProfit", "Lender", "NonParentRelative", "Unknown", "Institutional", "PropertySeller", "LocalAgency", "Other" ]
+}

@@ -1,0 +1,4 @@
+{
+    "additionalProperties" : false,
+    "enum" : [ "BridgeLoanNotDeposited", "ProceedsFromUnsecuredLoan", "IndividualDevelopmentAccount", "RealEstateOwned", "SaleOtherAssets", "ProceedsFromSaleOfNonRealEstateAsset", "RecreationalVehicle", "TrustAccount", "BorrowerEstimatedTotalAssets", "SavingsAccount", "RetirementFund", "EarnestMoneyCashDepositTowardPurchase", "GiftOfCash", "BorrowerPrimaryHome", "Grant", "MutualFund", "Automobile", "CertificateOfDepositTimeDeposit", "SeverancePackage", "GiftOfPropertyEquity", "EmployerAssistance", "MoneyMarketFund", "GiftsTotal", "RelocationMoney", "StockOptions", "CashOnHand", "Annuity", "LifeInsurance", "ProceedsFromSecuredLoan", "SavingsBond", "Bond", "NetWorthOfBusinessOwned", "CheckingAccount", "PendingNetSaleProceedsFromRealEstateAssets", "Stock", "Boat", "Other" ]
+}
